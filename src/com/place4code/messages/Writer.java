@@ -30,7 +30,7 @@ public class Writer implements Runnable {
             }
         }
 
-        message.write("Finish");
+        message.write("Finished");
 
     }
 }
