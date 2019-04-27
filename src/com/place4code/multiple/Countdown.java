@@ -4,6 +4,8 @@ import com.place4code.mythreads.ThreadsColors;
 
 public class Countdown {
 
+    private int i;
+
     public void doCountdown() {
 
         String color;
@@ -20,9 +22,13 @@ public class Countdown {
                 break;
         }
 
-        for (int i = 10; i > 0; i--) {
-            System.out.println(color + Thread.currentThread().getName() + ", i: " + i);
+        synchronized (this){
+            for (i = 10; i > 0; i--) {
+                System.out.println(color + Thread.currentThread().getName() + ", i: " + i);
+            }
         }
+
+
 
     }
 
