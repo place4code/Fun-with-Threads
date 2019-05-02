@@ -19,7 +19,9 @@ public class Producer implements Runnable {
         for (String value : nums) {
             try {
                 System.out.println(color + "Adding > " + value  + " <");
-                buffer.add(value);
+                synchronized (buffer) {
+                    buffer.add(value);
+                }
                 Thread.sleep(new Random().nextInt(1000));
             } catch (InterruptedException e) {
                 System.out.println("Producer was interrupted");
@@ -27,6 +29,9 @@ public class Producer implements Runnable {
             }
         }
         System.out.println(color + "Adding END and exiting");
-        buffer.add("END");
+        synchronized (buffer) {
+            buffer.add("END");
+        }
+
     }
 }
