@@ -2,18 +2,17 @@ package com.place4code.producerconsumer;
 
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Producer implements Runnable {
 
-    private List<String> buffer;
+    private ArrayBlockingQueue<String> buffer;
     private String color;
-    private ReentrantLock lock;
 
-    public Producer(List<String> buffer, String color, ReentrantLock lock) {
+    public Producer(ArrayBlockingQueue<String> buffer, String color) {
         this.buffer = buffer;
         this.color = color;
-        this.lock = lock;
     }
 
     @Override
@@ -22,9 +21,7 @@ public class Producer implements Runnable {
         for (String value : nums) {
             try {
                 System.out.println(color + "Adding > " + value  + " <");
-                lock.lock();
-                buffer.add(value);
-                lock.unlock();
+                buffer.put(value);
                 Thread.sleep(new Random().nextInt(1000));
             } catch (InterruptedException e) {
                 System.out.println("Producer was interrupted");
@@ -32,9 +29,11 @@ public class Producer implements Runnable {
             }
         }
         System.out.println(color + "Adding END and exiting");
-        lock.lock();
-        buffer.add("END");
-        lock.unlock();
+        try {
+            buffer.put("END");
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 }
